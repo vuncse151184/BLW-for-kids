@@ -196,14 +196,14 @@ const Login = () => {
               bottom: 20,
             }}
           >
-           <Link to='/blw-manager/login'>
+           {/* <Link to='/blw-manager/login'>
               <button
                 className="facebook-button"
                 style={{ fontSize: "15px", width: 110 }}
               >
                 Admin login
               </button>
-            </Link>
+            </Link> */}
           </div>
 
           {/* <div className="field">
