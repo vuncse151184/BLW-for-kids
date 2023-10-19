@@ -1,0 +1,9 @@
+.plan-container{
+    display: grid;
+    width: 1000px; 
+    gap: 30px;
+}
+
+.plan-image{
+    position: relative;
+}

@@ -1,0 +1,205 @@
+.container-admin {
+  
+    display: flex;
+    justify-content: start;
+ 
+}
+
+.container-sidebar {
+    position: relative;
+    
+}
+
+.admin-tab-active {
+    display: block;
+}
+
+.pay-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.bread-crumb {
+    font-family: "Nunito";
+}
+
+hr {
+    margin: 10;
+    position: relative;
+    left: 16px;
+    width: calc(100% - 28px);
+    border: none;
+    border-top: solid 2px var(--navbar-dark-secondary);
+}
+
+.heading-section {
+    font-size: 28px;
+    color: #000;
+}
+
+.row-trans {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+
+
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody+tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+.table-sm th,
+/* .table-sm td {
+    padding: 0.3rem;
+} */
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+    border-bottom-width: 2px;
+}
+
+.table-borderless th,
+.table-borderless td,
+.table-borderless thead th,
+.table-borderless tbody+tbody {
+    border: 0;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+.table-dark {
+    color: #fff;
+    background-color: #343a40;
+}
+
+.table-dark th,
+.table-dark td,
+.table-dark thead th {
+    border-color: #454d55;
+}
+
+.table-dark.table-bordered {
+    border: 0;
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-dark.table-hover tbody tr:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.075);
+}
+
+#heading-title {
+    display: flex;
+    align-items: center;
+    font-family: 'Nunito';
+}
+
+#heading {
+    font-family: "Nunito";
+    font-size: 35px;
+    font-weight: 700;
+}
+
+
+
+.container-trans {
+    width: 100%;
+    padding-top: 20px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 576px) {
+    .container-trans {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container-trans {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container-trans {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container-trans {
+        max-width: 1140px;
+    }
+}
+
+.col-md-12-trans {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+/* .table-wrap {
+    overflow-x: scroll;
+} */
+
+.button {
+    border-radius: 50px;
+    /* Make buttons rounded */
+    padding: 5px 10px;
+    /* Adjust padding for better appearance */
+}
+
+
+.incoming-button {
+    background-color: red;
+    /* Change this to your desired color for "Incoming" */
+    color: white;
+}

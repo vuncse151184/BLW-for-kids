@@ -1,0 +1,30 @@
+.layout-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-left: 20px;
+    gap: 25px;
+    }
+  
+    .layout-sidebar{
+      width: 200px;
+      margin-top: 20px;
+    }
+  
+    .layout-sidebar .layout-content{
+      width: 230px;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 65px;
+      z-index: 900;
+      min-height: 900px; 
+      overflow-y: auto;
+    }
+
+    .layout-sidebar .layout-ads{
+      position: -webkit-sticky;
+      position: sticky;
+      top: 65px;
+      z-index: 900;
+      overflow-y: auto;
+    }
+    

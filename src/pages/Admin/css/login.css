@@ -1,0 +1,71 @@
+.login-part {
+    background-color: #EEEEEE;
+    backdrop-filter: inherit;
+}
+
+.hamburger {
+    width: 108px;
+    height: 5px;
+    background-color: #6FCB9F;
+
+}
+
+.hamburger-2 {
+    width: 98px;
+    height: 5px;
+    background-color: #6FCB9F;
+
+}
+
+.hamburger-3 {
+    width: 108px;
+    height: 5px;
+    background-color: #000000;
+
+}
+
+.hamburger-4 {
+    width: 98px;
+    height: 5px;
+    background-color: #000000;
+
+}
+
+@font-face {
+    font-family: 'Nunito';
+    src: url('../../../fonts/Nuito/static//Nunito-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.form-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.input::placeholder {
+    font-family: 'Nunito', sans-serif;
+    color: #999;
+    font-weight: bold;
+    /* Example: Change the color */
+}
+
+.input {
+    font-family: 'Nunito', sans-serif;
+    color: #999;
+    font-weight: bold;
+    /* Example: Change the color */
+}
+
+.login-notice-p {
+    font-family: 'Nunito';
+}
+
+.login-content-container {
+    justify-content: "center";
+    align-items: "center";
+    align-content: "center";
+}

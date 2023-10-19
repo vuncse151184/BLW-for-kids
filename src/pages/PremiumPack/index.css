@@ -1,0 +1,66 @@
+.pack-container {
+    width: 1000px;
+    height: 100vh;
+    text-align: center;
+}
+
+.pack-table {
+    margin-top: 24px;
+    font-family: SF Pro, Roboto, Noto Sans, sans-serif;
+    padding-left: 300px;
+    margin: 0px;
+    padding: 0px;
+    outline: 0px;
+}
+
+.step-description {
+    color: rgb(128, 128, 137);
+    font-size: 22px;
+    line-height: 20px;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+
+.step-number {
+    width: 24px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: rgb(26, 148, 255);
+    color: rgb(255, 255, 255);
+    margin-right: 8px;
+    font-weight: 500;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+#transition-modal-title {
+    margin: 0px;
+    font-size: 17px;
+    font-weight: 500;
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.pack-header {
+    padding: 50px 0;
+}
+
+.pack-heading {
+    font-size: 45px;
+    font-family: "Nunito";
+    font-weight: 800;
+}
+
+.swal2-container {
+    z-index: 10000;
+    /* You can adjust this value as needed */
+}
+
+/* Ensure that the StyledModal has a lower z-index */
+.StyledModal {
+    z-index: 9999;
+    /* A value lower than the Swal modal */
+}

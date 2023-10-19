@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'Nunito';
+    src: url('./fonts/Nuito/static/Nunito-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+.App{
+    font-family: 'Nunito', monospace;
+}

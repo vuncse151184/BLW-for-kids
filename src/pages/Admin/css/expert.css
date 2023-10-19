@@ -1,0 +1,16 @@
+div.field input {
+    max-width: 300px;
+}
+
+div.field {
+    padding-bottom: 15px;
+}
+
+hr.expert-hr {
+    margin: 0;
+    position: relative;
+    left: 16px;
+    width: calc(100% - 32px);
+    border: none;
+    border-top: solid 1px var(--navbar-dark-secondary);
+}

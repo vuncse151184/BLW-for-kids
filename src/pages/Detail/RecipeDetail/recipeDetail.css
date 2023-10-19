@@ -1,0 +1,14 @@
+.img-recipe-detail{
+    width: 1200px;
+    height: 600px;
+    background-position: center;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.list-item-ingredients{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+

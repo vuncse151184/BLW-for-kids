@@ -1,0 +1,29 @@
+.layout-without-search-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-left: 50px;
+    gap: 25px;
+    }
+  
+    .layout-without-search-sidebar{
+      width: 200px;
+      margin-top: 50px;
+    }
+  
+    .layout-without-search-sidebar .layout-without-search-content{
+      width: 200px;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 65px;
+      z-index: 900;
+      height: 600px; 
+      overflow-y: auto;
+    }
+
+    .layout-without-search-sidebar .layout-without-search-ads{
+      position: -webkit-sticky;
+      position: sticky;
+      top: 65px;
+      z-index: 900;
+      overflow-y: auto;
+    }

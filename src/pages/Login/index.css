@@ -1,0 +1,69 @@
+
+.login-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  height: 100vh;
+}
+
+.login-user{
+  position: absolute;
+  top: -200px;
+}
+
+.facebook-button {
+  width: 200px;
+  background-color: #1877f2;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+
+.bg-image {
+  height: 100vh;
+  background-image: url('../../image/bg-login.png');
+  background-size: cover;
+  object-position: center;
+  background-repeat: no-repeat;
+}
+
+.login-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.line-text-center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 300px; 
+  margin-top: 20px;
+}
+
+.line-text-center:before,
+.line-text-center:after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid;
+  margin: 0 10px;
+}
+@media (max-width: 768px) {
+    
+  .line-text-center {
+    max-width: none; 
+  }
+
+  .column{
+    padding: 0px !important;
+  }
+  .columns{
+    margin: 0px !important;
+  }
+
+  }

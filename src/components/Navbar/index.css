@@ -1,0 +1,12 @@
+.navbar-item-text{
+    font-family: 'EB Garamond', serif;
+    font-weight: bold;
+    font-size: 20px;
+}
+@font-face {
+    font-family: 'Houstander Font Duo';
+    src: url('../../fonts/HoustanderDemo.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+

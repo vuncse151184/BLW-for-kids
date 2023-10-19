@@ -1,0 +1,76 @@
+
+.register-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    height: 100vh;
+  }
+  
+  
+  .bg-image {
+    height: 100vh;
+    background-image: url('../../image/bg-login.png');
+    background-size: cover;
+    object-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .register-content {
+    height: 100vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .column{
+    max-height: 100vh;
+  }
+  .line-text-center {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 300px; 
+    margin-top: 20px;
+  }
+  
+  .line-text-center:before,
+  .line-text-center:after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid;
+    margin: 0 10px;
+  }
+    .button-container {
+      margin-left: 100px;
+    }
+  
+    .google-button,
+    .facebook-button {
+      width: 200px;
+      background-color: #1877f2;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+  @media (max-width: 768px) {
+      
+    .line-text-center {
+      max-width: none; 
+    }
+  
+    .column{
+      padding: 0px !important;
+    }
+    .columns{
+      margin: 0px !important;
+    }
+    .button-container {
+      margin-left: 0; 
+      margin-top: 20px; 
+      text-align: center;
+    }
+    }
