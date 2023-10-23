@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Rating } from "@mui/material";
 import recipe from "../../../image/recipe2.jpg";
 import { Link, useParams } from "react-router-dom";
@@ -16,6 +16,8 @@ const RecipeDetail = () => {
   const { id } = useParams();
   const detailUrl = `https://blw-api.azurewebsites.net/api/Recipe/GetRecipe?id=${id}`;
   const upCommentUrl = `https://blw-api.azurewebsites.net/api/Rating/AddRating`;
+  const deleteFavoriteUrl = `https://blw-api.azurewebsites.net/api/Favorite/DeleteFavorite`;
+  const postFavoriteUrl = `https://blw-api.azurewebsites.net/api/Favorite/AddRecipeFavorite`;
   const [userRate, setUserRate] = useState(0);
   const [userComment, setUserComment] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -103,6 +105,70 @@ const RecipeDetail = () => {
     });
   };
 
+  console.log("chi tiet: ", detailRecipe);
+
+  const handleAddFavorite = (id) => {
+    if (!user) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Đăng nhập để được thêm thực đơn vào yêu thích",
+      });
+    } else {
+      fetch(postFavoriteUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+        body: JSON.stringify({
+          recipeId: id,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Đã thêm vào yêu thích",
+            showConfirmButton: false,
+            timer: 3000,
+          });
+          queryClient.invalidateQueries("detail-recipe");
+        })
+        .catch((error) => {
+          console.error("Error during fetch:", error);
+        });
+    }
+  };
+
+  const handleDeleteFavorite = async (id) => {
+    await fetch(`${deleteFavoriteUrl}?recipeId=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        queryClient.invalidateQueries("detail-recipe");
+      })
+      .catch((error) => {
+        console.error("Error during fetch:", error);
+      });
+  };
+
   return (
     <>
       {detailLoading ? (
@@ -141,14 +207,16 @@ const RecipeDetail = () => {
               </h2>
             </div>
             <div>
-              {detailRecipe.isFavorite && user ? (
+              {detailRecipe?.data?.isFavorite && user ? (
                 <FontAwesomeIcon
                   icon={faHeart}
                   className="has-text-primary"
                   style={{
-                    width: "10px",
+                    width: "50px",
                     height: "30px",
+                    cursor: "pointer",
                   }}
+                  onClick={() => handleDeleteFavorite(id)}
                 />
               ) : (
                 <button
@@ -158,6 +226,7 @@ const RecipeDetail = () => {
                     width: "40px",
                     height: "40px",
                   }}
+                  onClick={() => handleAddFavorite(id)}
                 >
                   <FontAwesomeIcon
                     icon={faHeart}
@@ -170,23 +239,28 @@ const RecipeDetail = () => {
               )}
             </div>
           </div>
-
-          <p className="subtitle is-5 mt-1">Ngày cập nhật: 13/9/2023</p>
+          {/* <p className="subtitle is-5 mt-5">
+            Ngày cập nhật:{" "}
+            {new Date(detailRecipe.data.updateTime).toLocaleDateString()}
+          </p> */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               marginBottom: 30,
+              marginTop: 30,
             }}
           >
             <Rating
               name="half-rating-read"
-              defaultValue={3.5}
+              defaultValue={detailRecipe.data.aveRate}
               precision={0.5}
               readOnly
               size="large"
             />
-            <span className="subtitle is-4 pl-5">4.5/5 ratings</span>
+            <span className="subtitle is-4 pl-5">
+              {detailRecipe.data.aveRate}/5 ratings
+            </span>
           </div>
           <div className="mb-5">
             <div className="mt-5">
@@ -209,7 +283,7 @@ const RecipeDetail = () => {
             </div>
             <div className="mt-5">
               <h4 className="title is-5 has-text-primary">
-                Thời gian nấu: &nbsp;
+                Thời gian chờ: &nbsp;
                 <span className="subtitle is-5">10 - 20 phút.</span>
               </h4>
             </div>
@@ -229,7 +303,12 @@ const RecipeDetail = () => {
             triển sau này của trẻ được tốt hơn.
           </p>
           <div style={{ textAlign: "center" }}>
-            <img src={recipe} alt="" className="img-recipe-detail" />
+            <img
+              src={recipe}
+              alt=""
+              className="img-recipe-detail"
+              style={{ width: 1200, height: 400 }}
+            />
           </div>
           <div className="mt-5">
             <h4 className="title is-4 has-text-primary">

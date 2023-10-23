@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Navbar from "../Navbar";
 import Search from "../Search";
 import Footer from "../Footer";
@@ -19,6 +19,7 @@ const LayoutNavSearchFooter = ({ children }) => {
 
   const searchApi = `https://blw-api.azurewebsites.net/api/Recipe/SearchRecipe`;
   const postFavoriteUrl = `https://blw-api.azurewebsites.net/api/Favorite/AddRecipeFavorite`;
+  const deleteFavoriteUrl = `https://blw-api.azurewebsites.net/api/Favorite/DeleteFavorite`;
   const handleSearch = async (
     search = "",
     ageIds = [""],
@@ -26,10 +27,6 @@ const LayoutNavSearchFooter = ({ children }) => {
     rating = 0
   ) => {
     try {
-      await setName(search);
-      await setAge(ageIds);
-      await setMeal(mealIds);
-      await setRate(rating);
       const response = await fetch(searchApi, {
         method: "POST",
         headers: {
@@ -46,9 +43,12 @@ const LayoutNavSearchFooter = ({ children }) => {
       if (response.status === 204) {
         console.log("No content found.");
       } else {
-        const searchNameData = await response.json();
-        console.log(age);
-        setSearch(searchNameData);
+        const searchData = await response.json();
+        setName(search);
+        setAge(ageIds);
+        setMeal(mealIds);
+        setRate(rating);
+        setSearch(searchData);
       }
     } catch (error) {
       console.error("Error during fetch:", error);
@@ -79,12 +79,41 @@ const LayoutNavSearchFooter = ({ children }) => {
           return response.json();
         })
         .then((data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Đã thêm vào yêu thích",
+            showConfirmButton: true,
+            footer: '<a href="/profile">Truy cập vào đây để xem chi tiết</a>',
+          });
           handleSearch(name, age, meal, rate);
         })
         .catch((error) => {
           console.error("Error during fetch:", error);
         });
     }
+  };
+
+  const handleDeleteFavorite = async (id) => {
+    await fetch(`${deleteFavoriteUrl}?recipeId=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        handleSearch(name, age, meal, rate);
+      })
+      .catch((error) => {
+        console.error("Error during fetch:", error);
+      });
   };
 
   return (
@@ -121,6 +150,7 @@ const LayoutNavSearchFooter = ({ children }) => {
                 return React.cloneElement(child, {
                   results: search,
                   addFavorite: handleAddFavorite,
+                  removeFavorite: handleDeleteFavorite,
                   key: child.props.id,
                 });
               }
