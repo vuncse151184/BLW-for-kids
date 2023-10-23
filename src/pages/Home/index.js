@@ -12,10 +12,11 @@ import Swal from "sweetalert2";
 import { useQueryClient } from "react-query";
 import vip from "../../image/premium-logo.png";
 
-const Home = ({ results, addFavorite }) => {
+const Home = ({ results, addFavorite, removeFavorite }) => {
   const recipeApi = `https://blw-api.azurewebsites.net/api/Recipe/LastUpdateRecipe`;
   const recommendRecipeApi = `https://blw-api.azurewebsites.net/api/Recipe/MostFavoriteRecipe`;
   const postFavoriteUrl = `https://blw-api.azurewebsites.net/api/Favorite/AddRecipeFavorite`;
+  const deleteFavoriteUrl = `https://blw-api.azurewebsites.net/api/Favorite/DeleteFavorite`;
   const user = JSON.parse(localStorage.getItem("user"));
   const queryClient = useQueryClient();
   const { data: recipes, isLoading: loading } = useQuery("allRecipes", () =>
@@ -62,6 +63,13 @@ const Home = ({ results, addFavorite }) => {
           return response.json();
         })
         .then((data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Đã thêm vào yêu thích",
+            showConfirmButton: true,
+            footer: '<a href="/profile">Truy cập vào đây để xem chi tiết</a>',
+          });
           queryClient.invalidateQueries("allRecipes");
           queryClient.invalidateQueries("recommendRecipes");
         })
@@ -69,6 +77,29 @@ const Home = ({ results, addFavorite }) => {
           console.error("Error during fetch:", error);
         });
     }
+  };
+
+  const handleDeleteFavorite = async (id) => {
+    await fetch(`${deleteFavoriteUrl}?recipeId=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        queryClient.invalidateQueries("allRecipes");
+        queryClient.invalidateQueries("recommendRecipes");
+      })
+      .catch((error) => {
+        console.error("Error during fetch:", error);
+      });
   };
 
   return (
@@ -86,94 +117,109 @@ const Home = ({ results, addFavorite }) => {
                 alignItems: "center",
               }}
             >
-              <div className="grid-container">
-                {results?.data?.map((result) => (
-                  <div className="grid-item" key={result.recipeId}>
-                    <div
-                      className="card"
-                      style={{ width: "290px", height: "380px" }}
-                    >
-                      <div
-                        className="card-image"
-                        style={{ position: "relative" }}
-                      >
-                        <figure className="image is-3by2">
-                          <img src={result.recipeImage} alt="Placeholder" />
-                        </figure>
-                        {result.forPremium && (
-                          <img
-                            src={vip}
-                            alt="vip"
-                            style={{
-                              position: "absolute",
-                              top: 0,
-                              right: 0,
-                            }}
-                          />
-                        )}
-                      </div>
-                      <div className="card-content">
-                        <div className="media">
-                          <div className="media-content">
-                            <p
-                              className="title is-5"
-                              style={{
-                                marginBottom: 10,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <Link to={`/recipe-detail/${result.recipeId}`}>
-                                <span
-                                  style={{
-                                    width: "190px",
-                                    height: "24px",
-                                    overflow: "hidden",
-                                    color: "black",
-                                  }}
-                                >
-                                  {result.recipeName}
-                                </span>
-                              </Link>
-                              {result.isFavorite && user ? (
-                                <FontAwesomeIcon
-                                  icon={faHeart}
-                                  className="has-text-primary"
-                                />
-                              ) : (
-                                <button
-                                  className="button is-primary"
-                                  style={{
-                                    borderRadius: "50%",
-                                    width: "10px",
-                                    height: "30px",
-                                  }}
-                                  onClick={() => addFavorite(result.recipeId)}
-                                >
-                                  <FontAwesomeIcon icon={faHeart} />
-                                </button>
-                              )}
-                            </p>
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Rating
-                                name="half-rating-read"
-                                defaultValue={result.aveRate}
-                                precision={0.5}
-                                readOnly
-                                size="small"
+              {results?.data?.length === 0 ? (
+                <>
+                  <h4
+                    className="title is-4 text-center"
+                    style={{ width: "1024px", height: "920px" }}
+                  >
+                    Không tìm thấy thực đơn phù hợp
+                  </h4>
+                </>
+              ) : (
+                <div style={{ width: "1024px", height: "920px" }}>
+                  <div className="grid-container">
+                    {results?.data?.map((result) => (
+                      <div className="grid-item" key={result.recipeId}>
+                        <div
+                          className="card"
+                          style={{ width: "290px", height: "380px" }}
+                        >
+                          <div
+                            className="card-image"
+                            style={{ position: "relative" }}
+                          >
+                            <figure className="image is-3by2">
+                              <img src={result.recipeImage} alt="Placeholder" />
+                            </figure>
+                            {result.forPremium && (
+                              <img
+                                src={vip}
+                                alt="vip"
+                                style={{
+                                  position: "absolute",
+                                  top: 0,
+                                  right: 0,
+                                }}
                               />
-                              &nbsp; &nbsp;
-                              <span className="title is-6">
-                                {result.aveRate}/5
-                              </span>
-                            </div>
-                            {/* <div style={{ marginTop: 5 }}>
+                            )}
+                          </div>
+                          <div className="card-content">
+                            <div className="media">
+                              <div className="media-content">
+                                <p
+                                  className="title is-5"
+                                  style={{
+                                    marginBottom: 10,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                  }}
+                                >
+                                  <Link
+                                    to={`/recipe-detail/${result.recipeId}`}
+                                    style={{
+                                      width: "190px",
+                                      height: "24px",
+                                      overflow: "hidden",
+                                      color: "black",
+                                    }}
+                                  >
+                                    <span>{result.recipeName}</span>
+                                  </Link>
+                                  {result.isFavorite && user ? (
+                                    <FontAwesomeIcon
+                                      icon={faHeart}
+                                      className="has-text-primary"
+                                      onClick={() =>
+                                        removeFavorite(result.recipeId)
+                                      }
+                                    />
+                                  ) : (
+                                    <button
+                                      className="button is-primary"
+                                      style={{
+                                        borderRadius: "50%",
+                                        width: "10px",
+                                        height: "30px",
+                                      }}
+                                      onClick={() =>
+                                        addFavorite(result.recipeId)
+                                      }
+                                    >
+                                      <FontAwesomeIcon icon={faHeart} />
+                                    </button>
+                                  )}
+                                </p>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Rating
+                                    name="half-rating-read"
+                                    defaultValue={result.aveRate}
+                                    precision={0.5}
+                                    readOnly
+                                    size="small"
+                                  />
+                                  &nbsp; &nbsp;
+                                  <span className="title is-6">
+                                    {result.aveRate}/5
+                                  </span>
+                                </div>
+                                {/* <div style={{ marginTop: 5 }}>
                               <p className="title is-6">
                                 <strong className="subtitle is-6 has-text-primary">
                                   Ngày cập nhật:
@@ -182,28 +228,33 @@ const Home = ({ results, addFavorite }) => {
                                 {new Date(favor.updateTime).toLocaleDateString()}
                               </p>
                             </div> */}
-                            <p
-                              className="title is-6 mb-4"
-                              style={{ marginTop: 10 }}
-                            >
-                              <strong className="subtitle is-6 has-text-primary">
-                                Loại:
-                              </strong>
-                              &nbsp; {result.mealName}
-                            </p>
-                            <p className="title is-6" style={{ marginTop: 10 }}>
-                              <strong className="subtitle is-6 has-text-primary">
-                                Độ tuổi:
-                              </strong>
-                              &nbsp; {result.ageName}
-                            </p>
+                                <p
+                                  className="title is-6 mb-4"
+                                  style={{ marginTop: 10 }}
+                                >
+                                  <strong className="subtitle is-6 has-text-primary">
+                                    Loại:
+                                  </strong>
+                                  &nbsp; {result.mealName}
+                                </p>
+                                <p
+                                  className="title is-6"
+                                  style={{ marginTop: 10 }}
+                                >
+                                  <strong className="subtitle is-6 has-text-primary">
+                                    Độ tuổi:
+                                  </strong>
+                                  &nbsp; {result.ageName}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
             </div>
           </>
         ) : (
@@ -335,7 +386,7 @@ const Home = ({ results, addFavorite }) => {
                               )}
                             </div>
                           </Link>
-                          <div className="card-content p-2">
+                          <div className="card-content p-5">
                             <div className="media">
                               <div className="media-content">
                                 <p
@@ -349,17 +400,14 @@ const Home = ({ results, addFavorite }) => {
                                 >
                                   <Link
                                     to={`/recipe-detail/${recommendRecipe.recipeId}`}
+                                    style={{
+                                      width: "190px",
+                                      height: "24px",
+                                      overflow: "hidden",
+                                      color: "black",
+                                    }}
                                   >
-                                    <span
-                                      style={{
-                                        width: "190px",
-                                        height: "24px",
-                                        overflow: "hidden",
-                                        color: "black",
-                                      }}
-                                    >
-                                      {recommendRecipe.recipeName}
-                                    </span>
+                                    <span>{recommendRecipe.recipeName}</span>
                                   </Link>
                                   <div
                                     style={{
@@ -371,6 +419,11 @@ const Home = ({ results, addFavorite }) => {
                                       <FontAwesomeIcon
                                         icon={faHeart}
                                         className="has-text-primary"
+                                        onClick={() =>
+                                          handleDeleteFavorite(
+                                            recommendRecipe.recipeId
+                                          )
+                                        }
                                       />
                                     ) : (
                                       <button
@@ -514,23 +567,23 @@ const Home = ({ results, addFavorite }) => {
                                 >
                                   <Link
                                     to={`/recipe-detail/${recipe.recipeId}`}
+                                    style={{
+                                      width: "190px",
+                                      height: "24px",
+                                      overflow: "hidden",
+                                      color: "black",
+                                    }}
                                   >
-                                    <span
-                                      style={{
-                                        width: "190px",
-                                        height: "24px",
-                                        overflow: "hidden",
-                                        color: "black",
-                                      }}
-                                    >
-                                      {recipe.recipeName}
-                                    </span>
+                                    <span>{recipe.recipeName}</span>
                                   </Link>
 
                                   {recipe.isFavorite && user ? (
                                     <FontAwesomeIcon
                                       icon={faHeart}
                                       className="has-text-primary"
+                                      onClick={() =>
+                                        handleDeleteFavorite(recipe.recipeId)
+                                      }
                                     />
                                   ) : (
                                     <button

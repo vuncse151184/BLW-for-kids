@@ -33,8 +33,9 @@ const Search = ({ handleSearchName, age, meal, rate }) => {
             placeholder="Tìm kiếm ở đây"
             value={searchName}
             onChange={handleSearch}
+            style={{ maxWidth: 600 }}
           />
-          <span className="icon is-small is-left">
+          <span className="icon is-small is-left ">
             <FontAwesomeIcon icon={faSearch} />
           </span>
         </p>
@@ -44,7 +45,6 @@ const Search = ({ handleSearchName, age, meal, rate }) => {
         style={{
           width: "50px",
           height: "50px",
-          marginTop: 15,
           border: "none",
           backgroundColor: "white",
           fontSize: 30,

@@ -20,13 +20,10 @@ const Recipe = () => {
   const recipeApi = `https://blw-api.azurewebsites.net/api/Recipe/LastUpdateRecipe`;
   const recommendRecipeApi = `https://blw-api.azurewebsites.net/api/Recipe/MostFavoriteRecipe`;
   const postFavoriteUrl = `https://blw-api.azurewebsites.net/api/Favorite/AddRecipeFavorite`;
+  const deleteFavoriteUrl = `https://blw-api.azurewebsites.net/api/Favorite/DeleteFavorite`;
   const user = JSON.parse(localStorage.getItem("user"));
   const queryClient = useQueryClient();
-  const {
-    data: recipes,
-    isLoading: loading,
-    isError: error,
-  } = useQuery("allRecipes", () =>
+  const { data: recipes, isLoading: loading } = useQuery("allRecipes", () =>
     fetch(recipeApi, {
       headers: {
         "Content-Type": "application/json",
@@ -34,17 +31,15 @@ const Recipe = () => {
       },
     }).then((response) => response.json())
   );
-  const {
-    data: recommendRecipes,
-    isLoading: recommendLoading,
-    isError: recommendError,
-  } = useQuery("recommendRecipes", () =>
-    fetch(recommendRecipeApi, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user?.token}`,
-      },
-    }).then((response) => response.json())
+  const { data: recommendRecipes, isLoading: recommendLoading } = useQuery(
+    "recommendRecipes",
+    () =>
+      fetch(recommendRecipeApi, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      }).then((response) => response.json())
   );
 
   const handleAddFavorite = (id) => {
@@ -72,6 +67,13 @@ const Recipe = () => {
           return response.json();
         })
         .then((data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Đã thêm vào yêu thích",
+            showConfirmButton: true,
+            footer: '<a href="/profile">Truy cập vào đây để xem chi tiết</a>',
+          });
           queryClient.invalidateQueries("allRecipes");
           queryClient.invalidateQueries("recommendRecipes");
         })
@@ -79,6 +81,29 @@ const Recipe = () => {
           console.error("Error during fetch:", error);
         });
     }
+  };
+
+  const handleDeleteFavorite = async (id) => {
+    await fetch(`${deleteFavoriteUrl}?recipeId=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        queryClient.invalidateQueries("allRecipes");
+        queryClient.invalidateQueries("recommendRecipes");
+      })
+      .catch((error) => {
+        console.error("Error during fetch:", error);
+      });
   };
 
   return (
@@ -212,6 +237,11 @@ const Recipe = () => {
                                 <FontAwesomeIcon
                                   icon={faHeart}
                                   className="has-text-primary"
+                                  onClick={() =>
+                                    handleDeleteFavorite(
+                                      recommendRecipe.recipeId
+                                    )
+                                  }
                                 />
                               ) : (
                                 <button
@@ -349,6 +379,9 @@ const Recipe = () => {
                                 <FontAwesomeIcon
                                   icon={faHeart}
                                   className="has-text-primary"
+                                  onClick={() =>
+                                    handleDeleteFavorite(recipe.recipeId)
+                                  }
                                 />
                               ) : (
                                 <button

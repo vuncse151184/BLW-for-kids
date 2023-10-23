@@ -16,7 +16,7 @@
       position: sticky;
       top: 65px;
       z-index: 900;
-      min-height: 900px; 
+      min-height: 750px;
       overflow-y: auto;
     }
 
