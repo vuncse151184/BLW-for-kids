@@ -40,7 +40,6 @@ const Navbar = () => {
   const [mouseLeftContent, setMouseLeftContent] = useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log("user: ", user);
   useEffect(() => {
     if (mouseLeftContent) {
       const timer = setTimeout(() => {

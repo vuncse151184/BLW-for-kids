@@ -193,7 +193,7 @@ const PlanDetail = () => {
               <ReactPaginate
                 pageCount={pageCount}
                 onPageChange={handlePageClick}
-                containerClassName={"pagination"}
+                containerClassName={"pagination-tu"}
                 activeClassName={"active"}
               />
             </div>
@@ -584,7 +584,7 @@ const PlanDetail = () => {
               <ReactPaginate
                 pageCount={calculateWeekPageCount()}
                 onPageChange={handleWeeklyPageClick}
-                containerClassName={"pagination"}
+                containerClassName={"pagination-tu"}
                 activeClassName={"active"}
               />
             </div>

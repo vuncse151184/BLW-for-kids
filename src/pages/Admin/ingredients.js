@@ -5,9 +5,6 @@ const FoodsManager = () => {
     const { data: ingredients, isLoading, isError } = useQuery('ingredientsData', () => {
         return fetch(ingredientAPI_URL).then(response => response.json());
     })
-
-
-    console.log("-----------------------", ingredients)
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);

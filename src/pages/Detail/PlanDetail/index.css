@@ -12,7 +12,7 @@
       cursor: pointer;
     }
     
-    .pagination {
+    .pagination-tu {
     
       background-color: white;
       border: 1px solid #ccc;
@@ -20,12 +20,12 @@
       padding: 0 8px;
     }
     
-    .pagination a {
+    .pagination-tu a {
       color: black;
       text-decoration: none;
     }
    
-    .pagination .active {
+    .pagination-tu .active {
       width: 30px;
       height: 25px;
       background-color: hsl(171, 100%, 41%);
