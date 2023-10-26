@@ -123,7 +123,7 @@ const LayoutNavSearchFooter = ({ children }) => {
         {user?.data?.isPremium && (
           <div style={{ display: "flex", justifyContent: "center" }}>
             <div
-              class="notification is-warning is-light mb-1"
+              className="notification is-warning is-light mb-1"
               style={{ width: 410, textAlign: "center" }}
             >
               Chào mừng bạn đã đến với gói
