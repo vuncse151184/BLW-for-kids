@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { styled, alpha } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import InputBase from "@mui/material/InputBase";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
 import Swal from "sweetalert2";
 import CircularProgress from '@mui/material/CircularProgress';
 import ReactDOM from 'react-dom';
@@ -18,14 +18,12 @@ import ReactPaginate from 'react-paginate';
 // import "./css/transaction.css"
 
 const Transactions = () => {
-    const navigate = useNavigate()
-    const admin = JSON.parse(localStorage.getItem('admin'))
-    const accessToken = admin?.token
-    const [transactionData, setTransactionData] = useState({ data: [] });
-    console.log(transactionData.data)
+  const navigate = useNavigate();
+  const admin = JSON.parse(localStorage.getItem("admin"));
+  const accessToken = admin?.token;
+  const [transactionData, setTransactionData] = useState({ data: [] });
 
     const handleUpdatePayment = (id, privateCode) => {
-        console.log('payment:', id)
         Swal.fire({
             title: `Approve payment <strong>${privateCode}?</strong>`,
             text: "You won't be able to revert this!",
@@ -113,7 +111,7 @@ const Transactions = () => {
                 });
 
         } else {
-            navigate('/blw-manager/login');
+          navigate("/blw-manager/login");
         }
     }
 
@@ -294,46 +292,45 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "20ch",
+      },
     },
+  },
 }));
 const StyledDateInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        // transition: theme.transitions.create('width'),
-        // width: '100%',
-        // [theme.breakpoints.up('sm')]: {
-        //     width: '12ch',
-        //     '&:focus': {
-        //         width: '20ch',
-        //     },
-        // },
-    },
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    // transition: theme.transitions.create('width'),
+    // width: '100%',
+    // [theme.breakpoints.up('sm')]: {
+    //     width: '12ch',
+    //     '&:focus': {
+    //         width: '20ch',
+    //     },
+    // },
+  },
 }));
