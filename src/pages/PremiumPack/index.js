@@ -220,9 +220,14 @@ const PremiumPack = () => {
                                         <div style={{ height: "auto", maxWidth: 250, width: "100%", paddingTop: "50px" }}>
 
                                             {data ? (
-                                                <img
-                                                    src={`data:image/jpeg;base64,${data.imageQR.fileContents}`}
-                                                />
+                                                <>
+                                                    <img
+                                                        src={`data:image/jpeg;base64,${data.imageQR.fileContents}`}
+                                                    />
+                                                    <div className="step-description" style={{ alignItems: "center" ,paddingTop:"30px"}}><p>Mã của bạn là<b> {data?.privateCode}</b> </p></div>
+                                                </>
+
+
                                             ) : (
                                                 <Box sx={{ display: 'flex', justifyContent: "center", alignContent: "center" }}>
                                                     <CircularProgress />

@@ -28,7 +28,7 @@ const CustomersManager = () => {
                 <p id="heading" >Khách hàng</p>
             </div>
             <div style={{ display: "flex" }}>
-                <button disabled className="button is-rounded" style={{ border: "1px solid black" }}> Tất cả ({customers?.data.length})</button>
+                <button disabled className="button is-rounded" style={{ border: "1px solid black" }}> Tất cả ({customers ? customers?.data.length : 0})</button>
             </div>
             <div className="container-trans">
                 <div className="row-trans">

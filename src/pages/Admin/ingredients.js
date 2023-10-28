@@ -6,7 +6,9 @@ import Modal from '@mui/material/Modal';
 import './css/expert.css';
 import Grid from '@mui/material/Grid';
 import Swal from "sweetalert2";
+import { Navigate } from "react-router-dom";
 const FoodsManager = () => {
+
     const queryClient = useQueryClient()
     const admin = JSON.parse(localStorage.getItem("admin"));
     const accessToken = admin?.token;
@@ -63,7 +65,11 @@ const FoodsManager = () => {
                 })
                 queryClient.invalidateQueries('ingredientsData');
             } else {
-                // Handle error response here, e.g., display an error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Add failed',
+                })
                 console.error('Error creating ingredient');
             }
         } catch (error) {
@@ -136,7 +142,11 @@ const FoodsManager = () => {
                 })
                 queryClient.invalidateQueries('ingredientsData');
             } else {
-
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Update failed',
+                })
                 console.error('Error creating ingredient');
             }
         } catch (error) {
@@ -174,8 +184,12 @@ const FoodsManager = () => {
                         )
                         queryClient.invalidateQueries('ingredientsData');
                     } else {
-
                         console.error('Error creating ingredient');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong! Delete failed',
+                        })
                     }
                 } catch (error) {
                     console.error('API request failed', error);
@@ -286,7 +300,7 @@ const FoodsManager = () => {
             </div >
 
             <div style={{ display: "flex" }}>
-                <button disabled className="button is-rounded" style={{ border: "1px solid black" }}> Tất cả (2)</button>
+                <button disabled className="button is-rounded" style={{ border: "1px solid black" }}> Tất cả ({ingredients?.data.length})</button>
                 <button style={{ marginLeft: "20px" }} onClick={handleOpen} className="button is-primary">+ Thêm mới</button>
             </div>
             <div className="container-trans">
@@ -319,7 +333,7 @@ const FoodsManager = () => {
                                                     <td>{ingredient.protein}</td>
                                                     <td>{ingredient.carbohydrate}</td>
                                                     <td>{ingredient.fat}</td>
-                                                    <td>{ingredient.calories}</td>
+                                                    <td>{parseFloat(ingredient.calories.toFixed(2))}</td>
                                                     <td>
                                                         <button className="button is-link" style={{ width: 24, height: 32 }} onClick={() => handleEditClick(ingredient)}>
                                                             <i className="fas fa-pen-to-square"></i>

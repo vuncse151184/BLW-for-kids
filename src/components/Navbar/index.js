@@ -23,6 +23,7 @@ import imgUser from "../../image/user.jpg";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import imgLogo from "../../image/logo.jpg";
+import vipLogo from "../../image/vip-logo.png"
 
 const style = {
   position: "absolute",
@@ -61,7 +62,6 @@ const Navbar = () => {
     localStorage.removeItem("user");
     window.location.reload();
   };
-
   return (
     <>
       <div style={{ position: "fixed", zIndex: 1000, width: "100%" }}>
@@ -219,9 +219,17 @@ const Navbar = () => {
                       style={{ display: "flex", justifyContent: "flex-start" }}
                     >
                       <div>
-                        <FontAwesomeIcon icon={faCrown} />
-                        &nbsp; &nbsp;
-                        <span className="title is-6">VIP</span>
+                        {!user?.data.isPremium ? (
+                          <><FontAwesomeIcon icon={faCrown} />
+                            &nbsp; &nbsp;
+                            <span className="title is-6">VIP</span>
+                          </>
+
+                        ) : (
+                          <img src={vipLogo} />
+                        )}
+
+
                       </div>
                     </button>
                   </div>
