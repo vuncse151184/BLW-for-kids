@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Grid } from "@mui/material";
+import { Grid, CircularProgress } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -10,15 +10,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { useQuery } from "react-query";
 import Swal from "sweetalert2";
+import { faPaintBrush, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { useQueryClient } from "react-query";
 
 const RecipesManager = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const queryClient = useQueryClient();
   const admin = JSON.parse(localStorage.getItem("admin"));
   //  ----------------------------------------------Directions-----------------------------------------------------------
   const [direction, setDirection] = useState([
-    { directionNum: 1, directionDesc: "", directionImage: [""] },
+    { directionNum: 1, directionDesc: "", directionImage: "" },
   ]);
   const nextStep = direction.length + 1;
   const handleInputChangeDirection = (e, index) => {
@@ -44,7 +47,7 @@ const RecipesManager = () => {
   const handleAddDirectionClick = () => {
     setDirection([
       ...direction,
-      { directionNum: nextStep, directionDesc: "", directionImage: [""] },
+      { directionNum: nextStep, directionDesc: "", directionImage: "" },
     ]);
   };
 
@@ -112,6 +115,8 @@ const RecipesManager = () => {
   const ageApi = `https://blw-api.azurewebsites.net/api/Age/GetAll`;
   const mealApi = `https://blw-api.azurewebsites.net/api/Meal/GetAll`;
 
+  console.log("Meal: ", meal);
+
   const { data: ageData } = useQuery("ageData", () =>
     fetch(ageApi).then((response) => response.json())
   );
@@ -155,6 +160,7 @@ const RecipesManager = () => {
           icon: "success",
           title: "Tạo thành công",
         });
+        queryClient.invalidateQueries("allRecipes");
         handleClose();
       } else {
         console.log("Tạo thất bại!!!");
@@ -163,7 +169,168 @@ const RecipesManager = () => {
       console.error("Error calling API:", error);
     }
   };
+  //  -------------------------------------------------EDIT-------------------------------------------------------------------
+  const [openEdit, setOpenEdit] = useState(false);
+  const [nameEdit, setNameEdit] = useState("");
+  const [descriptionEdit, setDescriptionEdit] = useState("");
+  const [prepareEdit, setPrepareEdit] = useState(1);
+  const [standTimeEdit, setStandTimeEdit] = useState(0);
+  const [cookTimeEdit, setCookTimeEdit] = useState(1);
+  const [servingEdit, setServingEdit] = useState(1);
+  const [premiumEdit, setPremiumEdit] = useState(true);
+  const [mealEdit, setMealEdit] = useState("");
+  const [ageEdit, setAgeEdit] = useState("");
+  const [recipeId, setRecipeId] = useState("");
+  const [imageEdit, setImageEdit] = useState("");
+  //  ----------------------------------------------Directions----------------------------------------------------------------
+  const [directionEdit, setDirectionEdit] = useState([
+    { directionNum: 1, directionDesc: "", directionImage: [""] },
+  ]);
+  const nextStepEdit = directionEdit.length + 1;
+  const handleInputChangeDirectionEdit = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...directionEdit];
+    list[index][name] = value;
+    setDirectionEdit(list);
+  };
 
+  const handleRemoveDirectionEditClick = (index) => {
+    const list = [...directionEdit];
+    const remove = list.filter((_, indexFilter) => !(indexFilter === index));
+    const renumberedFields = remove.map((field, index) => ({
+      ...field,
+      directionNum: index + 1,
+    }));
+    setDirectionEdit(renumberedFields);
+  };
+
+  const handleAddDirectionEditClick = () => {
+    setDirectionEdit([
+      ...directionEdit,
+      { directionNum: nextStepEdit, directionDesc: "", directionImage: [""] },
+    ]);
+  };
+
+  //  ----------------------------------------------Ingredients-----------------------------------------------------------
+
+  const [ingredientEdit, setIngredientEdit] = useState([
+    { ingredientId: "", quantity: 1 },
+  ]);
+
+  const handleInputChangeIngredientsEdit = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...ingredientEdit];
+    if (name === "quantity") {
+      list[index][name] = parseInt(value);
+    } else {
+      list[index][name] = value;
+    }
+
+    setIngredientEdit(list);
+  };
+
+  // handle click event of the Remove button
+  const handleRemoveIngredientsEditClick = (index) => {
+    const list = [...ingredientEdit];
+    const remove = list.filter((_, indexFilter) => !(indexFilter === index));
+    setIngredientEdit(remove);
+  };
+
+  // handle click event of the Add button
+  const handleAddIngredientsEditClick = () => {
+    setIngredientEdit([...ingredientEdit, { ingredientId: "", quantity: 1 }]);
+  };
+
+  const handleEditOpen = async (id) => {
+    try {
+      const response = await fetch(
+        `https://blw-api.azurewebsites.net/api/Recipe/GetRecipe?id=${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${admin?.token}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      setNameEdit(result.data.recipeName);
+      setDescriptionEdit(result.data.recipeDesc);
+      setPrepareEdit(result.data.prepareTime);
+      setStandTimeEdit(result.data.standTime);
+      setCookTimeEdit(result.data.cookTime);
+      setServingEdit(result.data.servings);
+      setPremiumEdit(result.data.forPremium);
+      setMealEdit(result.data.mealId);
+      setAgeEdit(result.data.ageId);
+      setImageEdit(result.data.recipeImage);
+      setDirectionEdit(result.data.directionVMs);
+      setIngredientEdit(result.data.ingredientOfRecipeVMs);
+      setRecipeId(result.data.recipeId);
+
+      setOpenEdit(true);
+      console.log("ket qua edit: ", result);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  console.log("image Edit", imageEdit);
+  const handleEditClose = () => setOpenEdit(false);
+  const recipeApi = `https://blw-api.azurewebsites.net/api/Recipe/LastUpdateRecipe`;
+  const editApi = `https://blw-api.azurewebsites.net/api/Recipe/UpdateRecipe?id=`;
+  const { data: recipes, isLoading: loading } = useQuery("allRecipes", () =>
+    fetch(recipeApi, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${admin?.token}`,
+      },
+    }).then((response) => response.json())
+  );
+  const handleEditRecipe = async (e, id) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${editApi}${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${admin.token}`,
+        },
+        body: JSON.stringify({
+          recipeId: recipeId,
+          recipeName: nameEdit,
+          recipeDesc: descriptionEdit,
+          prepareTime: prepareEdit,
+          standTime: standTimeEdit,
+          cookTime: cookTimeEdit,
+          servings: servingEdit,
+          mealId: mealEdit,
+          recipeImage: imageEdit,
+          ageId: ageEdit,
+          forPremium: premiumEdit,
+          directionVMs: directionEdit,
+          ingredientOfRecipeVMs: ingredientEdit,
+        }),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+
+        await Swal.fire({
+          icon: "success",
+          title: "Sửa thành công",
+        });
+        queryClient.invalidateQueries("allRecipes");
+        handleEditClose();
+      } else {
+        console.log("Tạo thất bại!!!");
+      }
+    } catch (error) {
+      console.error("Error calling API:", error);
+    }
+  };
   return (
     <>
       <div style={{ backgroundColor: "#f3f6f4", height: "50px" }}>
@@ -447,6 +614,7 @@ const RecipesManager = () => {
                             onChange={(e) => setMeal(e.target.value)}
                             value={meal}
                           >
+                            <option>Select Meal</option>
                             {mealData?.data.map((meal) => (
                               <option value={meal.mealId} key={meal.mealId}>
                                 {meal.mealName}
@@ -639,73 +807,431 @@ const RecipesManager = () => {
           </Modal>
         </div>
       </div>
-      <div className="container-trans" style={{ width: 1300 }}>
-        <div className="row-trans">
-          <div className="col-md-12-trans">
-            <div className="table-wrap">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Tên nguyên liệu</th>
-                    <th>Mô tả</th>
-                    <th>Chuẩn bị</th>
-                    <th>Thời gian chờ</th>
-                    <th>Thời gian nấu</th>
-                    <th>Tổng</th>
-                    <th>Số người ăn</th>
-                    <th>Premium</th>
-                    <th>Các bước thực hiên</th>
-                    <th>Nguyên liệu chuẩn bị</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style={{ alignItems: "center" }}>
-                    <td style={{ fontWeight: "600" }}>1001</td>
-                    <td>Mark Otto</td>
-                    <td>Japan</td>
-                    <td>$3000</td>
-                    <td>$1200</td>
-                    <td>$1200</td>
-                    <td>$1200</td>
-                    <td>$1200</td>
-                    <td>
-                      <button
-                        className="button is-success is-rounded"
-                        style={{ width: "150px" }}
-                      >
-                        Đã thanh toán
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="button is-success is-rounded"
-                        style={{ width: "150px" }}
-                      >
-                        Đã thanh toán
-                      </button>
-                    </td>
-                  </tr>
-                  <tr style={{ alignItems: "center" }}>
-                    <td>1001</td>
-                    <td>Mark Otto</td>
-                    <td>Japan</td>
-                    <td>$3000</td>
-                    <td>$1200</td>
-                    <td>
-                      <button
-                        className="button is-warning is-rounded"
-                        style={{ width: "150px" }}
-                      >
-                        Chưa thanh toán
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+      <div>
+        <Modal
+          open={openEdit}
+          onClose={handleEditClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <div style={{ textAlign: "center" }}>
+              <Typography
+                id="modal-modal-title"
+                variant="h6"
+                style={{ fontWeight: "bold", paddingBottom: "25px" }}
+                component="h2"
+              >
+                Cập nhật thực đơn
+              </Typography>
             </div>
-          </div>
-        </div>
+
+            <hr className="expert-hr" style={{ paddingBottom: "25px" }} />
+            <form>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Grid
+                    container
+                    spacing={{ xs: 2, md: 3 }}
+                    columns={{ xs: 4, sm: 8, md: 12 }}
+                    style={{ display: "flex", alignItems: "center" }}
+                  ></Grid>
+                  <Grid item xs={4} sm={6} md={6}>
+                    <div className="field">
+                      <label className="label">Tên món ăn</label>
+                      <input
+                        className="input is-primary"
+                        type="text"
+                        placeholder="Primary input"
+                        minLength="6"
+                        maxLength="200"
+                        required
+                        value={nameEdit}
+                        onChange={(e) => setNameEdit(e.target.value)}
+                        style={{ maxWidth: 800 }}
+                      ></input>
+                    </div>
+                  </Grid>
+                  <Grid item xs={4} sm={6} md={6}>
+                    <div className="field">
+                      <label className="label">Mô tả</label>
+                      <textarea
+                        className="input is-primary"
+                        type="text"
+                        minLength="10"
+                        maxLength="5000"
+                        required
+                        value={descriptionEdit}
+                        onChange={(e) => setDescriptionEdit(e.target.value)}
+                        placeholder="Mô tả"
+                        style={{ height: 80 }}
+                      ></textarea>
+                    </div>
+                  </Grid>
+                  <Grid item xs={4} sm={6} md={6}>
+                    <label className="label">Hình ảnh</label>
+                    <input
+                      className="input is-primary"
+                      type="text"
+                      placeholder="Image"
+                      value={imageEdit}
+                      onChange={(e) => setImageEdit(e.target.value)}
+                    />
+                  </Grid>
+                  <hr
+                    className="expert-hr"
+                    style={{ paddingBottom: "25px", marginTop: 20 }}
+                  />
+                  <Grid
+                    container
+                    spacing={{ xs: 2, md: 3 }}
+                    columns={{ xs: 4, sm: 8, md: 12 }}
+                  >
+                    <Grid item xs={2} sm={4} md={4}>
+                      <div className="field">
+                        <label className="label">Chuẩn bị (phút)</label>
+                        <input
+                          className="input is-primary"
+                          type="number"
+                          placeholder="0"
+                          required
+                          value={prepareEdit}
+                          onChange={(e) =>
+                            setPrepareEdit(parseInt(e.target.value))
+                          }
+                          min="1"
+                          style={{ width: 150 }}
+                        ></input>
+                      </div>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <div className="field">
+                        <label className="label">Thời gian chờ (phút)</label>
+                        <input
+                          className="input is-primary"
+                          type="number"
+                          placeholder="0"
+                          min="1"
+                          style={{ width: 150 }}
+                          value={standTimeEdit}
+                          onChange={(e) =>
+                            setStandTimeEdit(parseInt(e.target.value))
+                          }
+                        ></input>
+                      </div>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <div className="field">
+                        <label className="label">Thời gian nấu (phút)</label>
+                        <input
+                          className="input is-primary"
+                          type="number"
+                          placeholder="0"
+                          min="1"
+                          required
+                          style={{ width: 150 }}
+                          value={cookTimeEdit}
+                          onChange={(e) =>
+                            setCookTimeEdit(parseInt(e.target.value))
+                          }
+                        ></input>
+                      </div>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <div className="field">
+                        <label className="label">Số người ăn</label>
+                        <input
+                          className="input is-primary"
+                          type="number"
+                          placeholder="0"
+                          required
+                          min="1"
+                          style={{ width: 150 }}
+                          value={servingEdit}
+                          onChange={(e) =>
+                            setServingEdit(parseInt(e.target.value))
+                          }
+                        ></input>
+                      </div>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <label className="label">Premium</label>
+                      <div className="select is-primary">
+                        <select
+                          style={{ width: 150 }}
+                          onChange={(e) =>
+                            setPremiumEdit(JSON.parse(e.target.value))
+                          }
+                          value={premiumEdit.toString()}
+                        >
+                          <option value={true} selected={premiumEdit === true}>
+                            Có
+                          </option>
+                          <option
+                            value={false}
+                            selected={premiumEdit === false}
+                          >
+                            Không
+                          </option>
+                        </select>
+                      </div>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <label className="label">Bữa ăn</label>
+                      <div className="select is-primary">
+                        <select
+                          style={{ width: 150 }}
+                          onChange={(e) => setMealEdit(e.target.value)}
+                          value={mealEdit}
+                        >
+                          <option value="">Select Meal</option>
+                          {mealData?.data.map((meal) => (
+                            <option value={meal.mealId} key={meal.mealId}>
+                              {meal.mealName}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <label className="label">Số tuổi</label>
+                      <div className="select is-primary">
+                        <select
+                          style={{ width: 150 }}
+                          onChange={(e) => setAgeEdit(e.target.value)}
+                          value={ageEdit}
+                        >
+                          <option value="">Select Age</option>
+                          {ageData?.data.map((age) => (
+                            <option value={age.ageId} key={age.ageId}>
+                              {age.ageName}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Typography>
+              <hr
+                className="expert-hr"
+                style={{ paddingBottom: "25px", marginTop: 20 }}
+              />
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <div className="field">
+                  <label className="label">Các bước thực hiện</label>
+                  {directionEdit.map((x, i) => {
+                    return (
+                      <>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <textarea
+                            name="directionDesc"
+                            className="input is-primary"
+                            type="text"
+                            required
+                            minLength="20"
+                            placeholder="Primary input"
+                            style={{
+                              height: 50,
+                              marginBottom: 20,
+                              width: 500,
+                            }}
+                            value={x.directionDesc}
+                            onChange={(e) =>
+                              handleInputChangeDirectionEdit(e, i)
+                            }
+                          ></textarea>
+                          <div className="btn-box">
+                            {directionEdit.length !== 1 && (
+                              <FontAwesomeIcon
+                                icon={faCircleXmark}
+                                onClick={() =>
+                                  handleRemoveDirectionEditClick(i)
+                                }
+                                style={{
+                                  width: "50px",
+                                  height: "30px",
+                                  marginBottom: 10,
+                                  marginLeft: 20,
+                                  cursor: "pointer",
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                        {directionEdit.length - 1 === i && (
+                          <button
+                            onClick={handleAddDirectionEditClick}
+                            className="button is-success is-light"
+                          >
+                            Thêm mới
+                          </button>
+                        )}
+                      </>
+                    );
+                  })}
+                </div>
+              </Typography>
+              <hr
+                className="expert-hr"
+                style={{ paddingBottom: "25px", marginTop: 20 }}
+              />
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <div className="field">
+                  <label className="label">Nguyên liệu</label>
+                  {ingredientEdit.map((x, i) => {
+                    console.log("Edit", x);
+                    return (
+                      <>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginTop: 20,
+                          }}
+                        >
+                          <select
+                            className="dropdown-content is-primary"
+                            style={{ width: 200 }}
+                            name="ingredientId"
+                            value={x.ingredientId}
+                            required
+                            onChange={(e) =>
+                              handleInputChangeIngredientsEdit(e, i)
+                            }
+                          >
+                            <option>Select Ingredients</option>
+                            {ingredientData?.data.map((ingredient, index) => (
+                              <option
+                                value={ingredient.ingredientId}
+                                key={index}
+                                selected={
+                                  x.ingredientId === ingredient.ingredientId
+                                }
+                              >
+                                {ingredient.ingredientName}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            name="quantity"
+                            className="input is-primary"
+                            type="number"
+                            placeholder="0"
+                            required
+                            min="1"
+                            style={{ width: 150, marginLeft: 30 }}
+                            value={x.quantity}
+                            onChange={(e) =>
+                              handleInputChangeIngredientsEdit(e, i)
+                            }
+                          ></input>
+                          <div className="btn-box">
+                            {ingredientEdit.length !== 1 && (
+                              <FontAwesomeIcon
+                                icon={faCircleXmark}
+                                onClick={() =>
+                                  handleRemoveIngredientsEditClick(i)
+                                }
+                                style={{
+                                  width: "50px",
+                                  height: "30px",
+                                  marginBottom: 10,
+                                  marginLeft: 20,
+                                  cursor: "pointer",
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                        {ingredientEdit.length - 1 === i && (
+                          <button
+                            onClick={handleAddIngredientsEditClick}
+                            className="button is-success is-light mt-5"
+                          >
+                            Thêm mới
+                          </button>
+                        )}
+                      </>
+                    );
+                  })}
+                </div>
+              </Typography>
+              <hr
+                className="expert-hr"
+                style={{ paddingBottom: "25px", marginTop: 20 }}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: 10,
+                }}
+              >
+                <button
+                  className="button is-success is-light"
+                  type="submit"
+                  onClick={(e) => handleEditRecipe(e, recipeId)}
+                >
+                  Sửa thực đơn
+                </button>
+              </div>
+            </form>
+          </Box>
+        </Modal>
       </div>
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <table className="table" style={{ width: "1200px", marginTop: 20 }}>
+          <thead>
+            <tr>
+              <th>Tên món</th>
+              <th>Bữa ăn</th>
+              <th>Hình ảnh</th>
+              <th>Thích hợp</th>
+              <th>Tổng lượt thích</th>
+              <th>Tổng rate</th>
+              <th>Trung bình rate</th>
+              <th>Vip</th>
+              <th>Chỉnh sửa</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recipes.data.map((recipe) => (
+              <tr key={recipe.recipeId}>
+                <th>{recipe.recipeName}</th>
+                <th>{recipe.mealName}</th>
+                <th
+                  style={{
+                    maxWidth: "100px",
+                    overflow: "hidden",
+                  }}
+                >
+                  {recipe.recipeImage}
+                </th>
+                <th>{recipe.ageName}</th>
+                <th>{recipe.totalFavorite}</th>
+                <th>{recipe.totalRate}</th>
+                <th>{recipe.aveRate}</th>
+                <th>{recipe.forPremium ? "True" : "False"}</th>
+                <th>
+                  <button>
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                  &nbsp; &nbsp;
+                  <button onClick={() => handleEditOpen(recipe.recipeId)}>
+                    <FontAwesomeIcon icon={faPaintBrush} />
+                  </button>
+                </th>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </>
   );
 };

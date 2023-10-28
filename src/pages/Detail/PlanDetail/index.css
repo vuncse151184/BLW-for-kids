@@ -13,22 +13,10 @@
     }
     
     .pagination-tu {
-    
-      background-color: white;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      padding: 0 8px;
+      width: 600px;
     }
     
-    .pagination-tu a {
-      color: black;
-      text-decoration: none;
-    }
+    
    
-    .pagination-tu .active {
-      width: 30px;
-      height: 25px;
-      background-color: hsl(171, 100%, 41%);
-    }
 
     
