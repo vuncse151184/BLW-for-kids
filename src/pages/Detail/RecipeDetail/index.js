@@ -11,6 +11,7 @@ import loadingGif from "../../../image/Baby-Crawl-Cycle-unscreen.gif";
 import { useQueryClient } from "react-query";
 import crown from "../../../image/crown.png";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const RecipeDetail = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const RecipeDetail = () => {
   const [userRate, setUserRate] = useState(0);
   const [userComment, setUserComment] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: detailRecipe, isLoading: detailLoading } = useQuery(
     "detail-recipe",
@@ -30,7 +32,12 @@ const RecipeDetail = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user?.token}`,
         },
-      }).then((response) => response.json())
+      }).then((response) => {
+        if (!response.ok) {
+          navigate("/");
+        }
+        return response.json();
+      })
   );
   const handleComment = () => {
     if (userRate === 0) {
@@ -196,14 +203,14 @@ const RecipeDetail = () => {
                 alignItems: "center",
               }}
             >
-              {detailRecipe.data.forPremium && (
+              {detailRecipe?.data?.forPremium && (
                 <>
                   <img src={crown} alt="" style={{ width: 50, height: 50 }} />
                   &nbsp; &nbsp; &nbsp; &nbsp;
                 </>
               )}
               <h2 className="title is-2 has-text-primary mb-0">
-                {detailRecipe.data.recipeName}
+                {detailRecipe?.data?.recipeName}
               </h2>
             </div>
             <div>
@@ -241,7 +248,7 @@ const RecipeDetail = () => {
           </div>
           {/* <p className="subtitle is-5 mt-5">
             Ngày cập nhật:{" "}
-            {new Date(detailRecipe.data.updateTime).toLocaleDateString()}
+            {new Date(detailRecipe?.data?.updateTime).toLocaleDateString()}
           </p> */}
           <div
             style={{
@@ -253,13 +260,13 @@ const RecipeDetail = () => {
           >
             <Rating
               name="half-rating-read"
-              defaultValue={detailRecipe.data.aveRate}
+              defaultValue={detailRecipe?.data?.aveRate}
               precision={0.5}
               readOnly
               size="large"
             />
             <span className="subtitle is-4 pl-5">
-              {detailRecipe.data.aveRate}/5 ratings
+              {detailRecipe?.data?.aveRate}/5 ratings
             </span>
           </div>
           <div className="mb-5">
@@ -272,54 +279,59 @@ const RecipeDetail = () => {
             <div className="mt-5">
               <h4 className="title is-5 has-text-primary">
                 Thích hợp: &nbsp;
-                <span className="subtitle is-5">Với trẻ 6 tháng trở lên.</span>
+                <span className="subtitle is-5">
+                  {detailRecipe?.data?.ageName}
+                </span>
               </h4>
             </div>
             <div className="mt-5">
               <h4 className="title is-5 has-text-primary">
                 Thời gian chuẩn bị: &nbsp;
-                <span className="subtitle is-5">30 phút.</span>
+                <span className="subtitle is-5">
+                  {detailRecipe?.data?.prepareTime} phút.
+                </span>
               </h4>
             </div>
             <div className="mt-5">
               <h4 className="title is-5 has-text-primary">
                 Thời gian chờ: &nbsp;
-                <span className="subtitle is-5">10 - 20 phút.</span>
+                <span className="subtitle is-5">
+                  {detailRecipe?.data?.standTime} phút.
+                </span>
               </h4>
             </div>
             <div className="mt-5">
               <h4 className="title is-5 has-text-primary">
                 Thời gian nấu: &nbsp;
-                <span className="subtitle is-5">20 - 30 phút.</span>
+                <span className="subtitle is-5">
+                  {detailRecipe?.data?.cookTime} phút.
+                </span>
               </h4>
             </div>
           </div>
-          <p>
-            Ăn dặm chỉ huy (BLW - Baby Led Weaning) là phương pháp ăn dặm cho
-            phép trẻ tự quyết định món ăn và cách ăn theo ý mình. Trẻ có thể bốc
-            bằng tay, dùng thìa, dĩa để ăn mà không có sự trợ giúp của bố mẹ.
-            Phương pháp này cũng giúp trẻ tăng vận động, rèn luyện sự linh hoạt,
-            cách xử lý và tiếp nhận thức ăn một cách chủ động, giúp cho sự phát
-            triển sau này của trẻ được tốt hơn.
-          </p>
+          <p>{detailRecipe?.data?.recipeDesc}</p>
           <div style={{ textAlign: "center" }}>
             <img
-              src={recipe}
+              src={detailRecipe?.data?.recipeImage}
               alt=""
               className="img-recipe-detail"
-              style={{ width: 1200, height: 400 }}
+              style={{ width: 1200, height: 500 }}
             />
           </div>
           <div className="mt-5">
             <h4 className="title is-4 has-text-primary">
-              Nguyên liệu chuẩn bị:{" "}
+              Nguyên liệu chuẩn bị:
             </h4>
             <ul style={{ listStyleType: "disc", paddingLeft: "20px" }}>
-              <li className="list-item-ingredients">Khuôn ép sushi.</li>
-              <li className="list-item-ingredients">Cơm trắng.</li>
-              <li className="list-item-ingredients">5 con tôm tươi.</li>
-              <li className="list-item-ingredients">30g bông cải xanh.</li>
-              <li className="list-item-ingredients">1 thìa cà phê dầu oliu.</li>
+              {detailRecipe?.data?.ingredientOfRecipeVMs.map((ingredient) => (
+                <li
+                  className="list-item-ingredients"
+                  key={ingredient.ingredientId}
+                >
+                  {ingredient.quantity} x {ingredient.measure}{" "}
+                  {ingredient.ingredientName}
+                </li>
+              ))}
             </ul>
           </div>
           <div className="mt-5">
@@ -327,22 +339,14 @@ const RecipeDetail = () => {
               Các bước thực hiện:{" "}
             </h4>
             <ol style={{ paddingLeft: "20px" }} type="1">
-              <li className="list-item-ingredients">
-                Cho cơm nấu chín vào khuôn và cuộn vừa với miệng bé.
-              </li>
-              <li className="list-item-ingredients">
-                Tôm rửa sạch, cắt chỉ lưng, hấp và lột sạch vỏ.
-              </li>
-              <li className="list-item-ingredients">
-                Bông cải xanh tách ra nhỏ và luộc.
-              </li>
-              <li className="list-item-ingredients">
-                Cho bé tráng miệng bằng 1 hoặc ½ quả chuối.
-              </li>
-              <li className="list-item-ingredients">
-                Đây là thực đơn ăn dặm tự chỉ huy vừa ngon vừa đơn giản mẹ nào
-                cũng có thể làm được.
-              </li>
+              {detailRecipe?.data?.directionVMs.map((direction) => (
+                <li
+                  className="list-item-ingredients"
+                  key={direction.directionId}
+                >
+                  {direction.directionDesc}
+                </li>
+              ))}
             </ol>
           </div>
           <div>
@@ -415,7 +419,7 @@ const RecipeDetail = () => {
               </div>
             )}
             {detailRecipe?.data?.ratingVMs &&
-              detailRecipe.data.ratingVMs.map((rate) => (
+              detailRecipe?.data?.ratingVMs.map((rate) => (
                 <div
                   className="box"
                   style={{ width: "600px" }}
