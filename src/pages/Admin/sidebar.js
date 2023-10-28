@@ -11,7 +11,7 @@ const SideBar = ({ selectContent }) => {
         setSelectedContent(content)
         selectContent(content)
     }
-
+    console.log(selectedContent)
     const handleLogout = () => {
         localStorage.removeItem("admin");
         navigate('/blw-manager/login')
@@ -29,8 +29,8 @@ const SideBar = ({ selectContent }) => {
                 <div id="tab-expert" className={selectedContent === 'Chuyên gia' ? " nav-button active" : "nav-button"} onClick={() => handleSelectContent('Chuyên gia')}><i className="fas fa-user-tie"></i><span>Chuyên gia</span></div>
                 <div id="tab-trans" className={selectedContent === 'Giao dịch' ? " nav-button active" : "nav-button"} onClick={() => handleSelectContent('Giao dịch')}><i className="fas fa-hand-holding-dollar"></i><span>Giao dịch</span></div>
                 <hr />
-                <div id="tab-recipe" className={selectedContent === 'Công Thức' ? " nav-button active" : "nav-button"} onClick={() => handleSelectContent('Công thức')}><i className="fas fa-utensils"></i><span>Công thức</span></div>
-                <div id="tab-food" className={selectedContent === 'Nguyên Liệu' ? " nav-button active" : "nav-button"} onClick={() => handleSelectContent('Nguyên liệu')}><i className="fas fa-burger"></i><span>Nguyên liệu</span></div>
+                <div id="tab-recipe" className={selectedContent === 'Công thức' ? " nav-button active" : "nav-button"} onClick={() => handleSelectContent('Công thức')}><i className="fas fa-utensils"></i><span>Công thức</span></div>
+                <div id="tab-food" className={selectedContent === 'Nguyên liệu' ? " nav-button active" : "nav-button"} onClick={() => handleSelectContent('Nguyên liệu')}><i className="fas fa-burger"></i><span>Nguyên liệu</span></div>
                 <hr />
 
 
