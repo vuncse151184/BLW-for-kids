@@ -2,6 +2,7 @@ import { RouterComponents } from "./routers";
 import "bulma/css/bulma.min.css";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { Analytics } from '@vercel/analytics/react';
 import { getAnalytics } from "firebase/analytics";
 import {
   useQuery,
@@ -38,6 +39,7 @@ function App() {
       <div style={{ position: "relative" }} className="App">
         <RouterComponents />
       </div>
+      <Analytics />
     </QueryClientProvider>
 
   );
