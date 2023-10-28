@@ -66,7 +66,7 @@ const RecipesManager = () => {
     const { name, value } = e.target;
     const list = [...ingredient];
     if (name === "quantity") {
-      list[index][name] = parseInt(value);
+      list[index][name] = parseFloat(value);
     } else {
       list[index][name] = value;
     }
@@ -161,6 +161,21 @@ const RecipesManager = () => {
           title: "Tạo thành công",
         });
         queryClient.invalidateQueries("allRecipes");
+        setName("");
+        setDescription("");
+        setPrepare(1);
+        setStandTime(0);
+        setCookTime(1);
+        setServing(1);
+        setPremium(true);
+        setMeal("");
+        setAge("");
+        setImage("");
+        setDirection([
+          { directionNum: 1, directionDesc: "", directionImage: "" },
+        ]);
+        setIngredient([{ ingredientId: "", quantity: 1 }]);
+
         handleClose();
       } else {
         console.log("Tạo thất bại!!!");
@@ -221,7 +236,7 @@ const RecipesManager = () => {
     const { name, value } = e.target;
     const list = [...ingredientEdit];
     if (name === "quantity") {
-      list[index][name] = parseInt(value);
+      list[index][name] = parseFloat(value);
     } else {
       list[index][name] = value;
     }
@@ -376,7 +391,7 @@ const RecipesManager = () => {
           className="button is-rounded"
           style={{ border: "1px solid black" }}
         >
-          Tất cả (2)
+          Tất cả ({recipes?.data?.length})
         </button>
         <button
           style={{ marginLeft: "20px" }}
@@ -742,6 +757,7 @@ const RecipesManager = () => {
                               name="quantity"
                               className="input is-primary"
                               type="number"
+                              step="0,01"
                               placeholder="0"
                               required
                               min="1"
