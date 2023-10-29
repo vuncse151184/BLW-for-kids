@@ -182,21 +182,18 @@ const PlanDetail = () => {
       </div>
       {buttonDate && (
         <>
-          <div style={{ marginTop: 30 }}>
-            <div
-              style={{
-                width: 600,
-                margin: "0 auto",
-                textAlign: "center",
-              }}
-            >
-              <ReactPaginate
-                pageCount={pageCount}
-                onPageChange={handlePageClick}
-                containerClassName={"pagination-tu"}
-                activeClassName={"active"}
-              />
-            </div>
+          <div
+            style={{ marginTop: 30, display: "flex", justifyContent: "center" }}
+          >
+            <ReactPaginate
+              pageCount={pageCount}
+              onPageChange={handlePageClick}
+              containerClassName="pagination is-centered pagination-tu"
+              previousClassName="pagination-previous"
+              nextClassName="pagination-next"
+              pageLinkClassName="pagination-link"
+              activeLinkClassName="is-current"
+            />
           </div>
 
           <div className="mt-5 mb-5">
