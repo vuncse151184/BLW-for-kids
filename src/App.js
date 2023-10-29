@@ -38,8 +38,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div style={{ position: "relative" }} className="App">
         <RouterComponents />
+        <Analytics />
       </div>
-      <Analytics />
+
     </QueryClientProvider>
 
   );
