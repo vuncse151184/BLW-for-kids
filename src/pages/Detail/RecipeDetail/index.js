@@ -67,6 +67,8 @@ const RecipeDetail = () => {
           return response.json();
         })
         .then((data) => {
+          setUserRate("");
+          setUserComment("");
           queryClient.invalidateQueries("detail-recipe");
         })
         .catch((error) => {
