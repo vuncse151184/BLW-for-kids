@@ -242,13 +242,13 @@ const FoodsManager = () => {
                                         <Grid item xs={4} sm={6} md={6}>
                                             <div className="field">
                                                 <label className="label">Tên NL</label>
-                                                <input className="input is-primary" name="ingredientName" value={formData.ingredientName} onChange={handleFormChange} type="text" placeholder="ví dụ: nấm ..."></input>
+                                                <input className="input is-primary" required name="ingredientName" value={formData.ingredientName} onChange={handleFormChange} type="text" placeholder="ví dụ: nấm ..."></input>
                                             </div>
                                         </Grid>
                                         <Grid item xs={4} sm={6} md={6}>
                                             <div className="field">
                                                 <label className="label">Đơn vị đo</label>
-                                                <input className="input is-primary" name="measure" type="text" value={formData.measure} onChange={handleFormChange} placeholder="ví dụ: 100g ..."></input>
+                                                <input className="input is-primary" required name="measure" type="text" value={formData.measure} onChange={handleFormChange} placeholder="ví dụ: 100g ..."></input>
                                             </div>
                                         </Grid>
                                     </Grid>
@@ -260,25 +260,25 @@ const FoodsManager = () => {
                                         <Grid item xs={4} sm={6} md={6}>
                                             <div className="field">
                                                 <label className="label">Protein</label>
-                                                <input className="input is-primary" type="number" name="protein" value={formData.protein} onChange={handleFormChange} placeholder="ví dụ: 100"></input>
+                                                <input className="input is-primary" required type="number" name="protein" value={formData.protein} onChange={handleFormChange} placeholder="ví dụ: 100"></input>
                                             </div>
                                         </Grid>
                                         <Grid item xs={4} sm={6} md={6}>
                                             <div className="field">
                                                 <label className="label">Carbs</label>
-                                                <input className="input is-primary" type="number" name="carbohydrate" value={formData.carbohydrate} onChange={handleFormChange} placeholder="ví dụ: 100"></input>
+                                                <input className="input is-primary" required type="number" name="carbohydrate" value={formData.carbohydrate} onChange={handleFormChange} placeholder="ví dụ: 100"></input>
                                             </div>
                                         </Grid>
                                         <Grid item xs={4} sm={6} md={6}>
                                             <div className="field">
                                                 <label className="label">Fat</label>
-                                                <input className="input is-primary" type="number" name="fat" value={formData.fat} onChange={handleFormChange} placeholder="ví dụ: 100"></input>
+                                                <input className="input is-primary" required type="number" name="fat" value={formData.fat} onChange={handleFormChange} placeholder="ví dụ: 100"></input>
                                             </div>
                                         </Grid>
                                         <Grid item xs={4} sm={6} md={6}>
                                             <div className="field">
                                                 <label className="label">Total calories(Kcal)</label>
-                                                <input className="input is-primary" type="number" name="calories" value={formData.calories} onChange={handleFormChange} placeholder="ví dụ: 100"></input>
+                                                <input className="input is-primary" required type="number" name="calories" value={formData.calories} onChange={handleFormChange} placeholder="ví dụ: 100"></input>
                                             </div>
                                         </Grid>
                                     </Grid>

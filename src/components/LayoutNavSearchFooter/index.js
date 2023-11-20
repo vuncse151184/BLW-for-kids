@@ -120,18 +120,6 @@ const LayoutNavSearchFooter = ({ children }) => {
     <>
       <Navbar />
       <div style={{ paddingTop: 70 }}>
-        {user?.data?.isPremium && (
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div
-              className="notification is-warning is-light mb-1"
-              style={{ width: 410, textAlign: "center" }}
-            >
-              Chào mừng bạn đã đến với gói
-              <strong className="has-text-warning is-dark"> Vip </strong>của
-              chúng tôi
-            </div>
-          </div>
-        )}
         <Search
           handleSearchName={handleSearch}
           age={age}
