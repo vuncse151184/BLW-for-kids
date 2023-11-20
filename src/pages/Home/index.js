@@ -127,7 +127,7 @@ const Home = ({ results, addFavorite, removeFavorite }) => {
                   </h4>
                 </>
               ) : (
-                <div style={{ width: "1024px", height: "920px" }}>
+                <div style={{ width: "1024px", minHeight: "920px" }}>
                   <div className="grid-container">
                     {results?.data?.map((result) => (
                       <div className="grid-item" key={result.recipeId}>

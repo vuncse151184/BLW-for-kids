@@ -24,10 +24,10 @@ const Profile = () => {
   const [active, setActive] = useState("account");
   const [dataAccount, setDataAccount] = useState([]);
   const [favorite, setFavorite] = useState([]);
-  const [changeEmail, setChangeEmail] = useState("");
-  const [changePhone, setChangePhone] = useState("");
-  const [changeAvatar, setChangeAvatar] = useState("");
-  const [changeDateOfBirth, setChangeDateOfBirth] = useState("");
+  const [changeEmail, setChangeEmail] = useState(null);
+  const [changePhone, setChangePhone] = useState(null);
+  const [changeAvatar, setChangeAvatar] = useState(null);
+  const [changeDateOfBirth, setChangeDateOfBirth] = useState(null);
   const [gender, setGender] = useState(1);
   const [fullname, setFullname] = useState("");
   const accountApi = `https://blw-api.azurewebsites.net/api/Customers/GetInfo`;
@@ -68,10 +68,11 @@ const Profile = () => {
       })
       .then((data) => {
         setDataAccount(data);
-        setFullname(data?.data?.fullname || "");
-        setChangeDateOfBirth(data?.data?.dateOfBirth || "");
-        setChangePhone(data?.data?.phoneNum || "");
-        setGender(data?.data?.gender || "");
+        setFullname(data?.data?.fullname || null);
+        setChangeEmail(data?.data?.email || null);
+        setChangeDateOfBirth(data?.data?.dateOfBirth || null);
+        setChangePhone(data?.data?.phoneNum || null);
+        setGender(data?.data?.gender || null);
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
@@ -340,7 +341,7 @@ const Profile = () => {
               </div>
             ) : (
               <form
-                style={{ paddingLeft: 15, position: "relative" }}
+                style={{ paddingLeft: 150, position: "relative" }}
                 onSubmit={handleSubmit}
               >
                 <img
@@ -471,7 +472,7 @@ const Profile = () => {
               </form>
             )
           ) : active === "favorite" ? (
-            <div style={{ paddingLeft: 15 }}>
+            <div style={{ paddingLeft: 150 }}>
               <div
                 style={{
                   display: "flex",
@@ -558,119 +559,123 @@ const Profile = () => {
               )}
             </div>
           ) : active === "premium" ? (
-            <div style={{ paddingLeft: 15, position: "relative" }}>
+            <>
               <img
                 src={penguin}
                 alt="penguin"
                 style={{
                   position: "absolute",
                   width: 350,
-                  left: 785,
+                  left: 1080,
                   top: 200,
                 }}
               />
               <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
+                style={{ paddingLeft: 100, position: "relative", zIndex: 1000 }}
               >
-                <h2 className="title is-2 mb-0">Chi tiết gói</h2>
-                &nbsp; &nbsp; &nbsp;
-                {user.data.isPremium && <img src={premium} alt="" />}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <h2 className="title is-2 mb-0">Chi tiết gói</h2>
+                  &nbsp; &nbsp; &nbsp;
+                  {user.data.isPremium && <img src={premium} alt="" />}
+                </div>
+                <div className="notification is-primary is-light mt-5">
+                  Bạn đã mua gói 365 ngày vào lúc <strong> 12h</strong> ngày
+                  <strong> 17/9/2023</strong>, gói sẽ hết hạn vào lúc
+                  <strong> 12h</strong> ngày <strong> 17/9/2024 </strong>
+                </div>
+                <h4 className="subtitle is-4">Lịch sử mua hàng</h4>
+                <div className="table-container">
+                  <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                    <thead>
+                      <tr>
+                        <th>Ngày mua hàng</th>
+                        <th>Thời gian mua</th>
+                        <th>Tên gói</th>
+                        <th>Mệnh giá</th>
+                        <th>Ngày hết hạn</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <td>17/9/2023</td>
+                        <td>12:59:100</td>
+                        <td>Tên gói 1</td>
+                        <td>90000 VNĐ</td>
+                        <td>17/9/2024</td>
+                      </tr>
+                      <tr>
+                        <td>17/9/2023</td>
+                        <td>12:59:100</td>
+                        <td>Tên gói 1</td>
+                        <td>90000 VNĐ</td>
+                        <td>17/9/2024</td>
+                      </tr>
+                      <tr>
+                        <td>17/9/2023</td>
+                        <td>12:59:100</td>
+                        <td>Tên gói 1</td>
+                        <td>90000 VNĐ</td>
+                        <td>17/9/2024</td>
+                      </tr>
+                      <tr>
+                        <td>17/9/2023</td>
+                        <td>12:59:100</td>
+                        <td>Tên gói 1</td>
+                        <td>90000 VNĐ</td>
+                        <td>17/9/2024</td>
+                      </tr>
+                      <tr>
+                        <td>17/9/2023</td>
+                        <td>12:59:100</td>
+                        <td>Tên gói 1</td>
+                        <td>90000 VNĐ</td>
+                        <td>17/9/2024</td>
+                      </tr>
+                      <tr>
+                        <td>17/9/2023</td>
+                        <td>12:59:100</td>
+                        <td>Tên gói 1</td>
+                        <td>90000 VNĐ</td>
+                        <td>17/9/2024</td>
+                      </tr>
+                      <tr>
+                        <td>17/9/2023</td>
+                        <td>12:59:100</td>
+                        <td>Tên gói 1</td>
+                        <td>90000 VNĐ</td>
+                        <td>17/9/2024</td>
+                      </tr>
+                      <tr>
+                        <td>17/9/2023</td>
+                        <td>12:59:100</td>
+                        <td>Tên gói 1</td>
+                        <td>90000 VNĐ</td>
+                        <td>17/9/2024</td>
+                      </tr>
+                      <tr>
+                        <td>17/9/2023</td>
+                        <td>12:59:100</td>
+                        <td>Tên gói 1</td>
+                        <td>90000 VNĐ</td>
+                        <td>17/9/2024</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
               </div>
-              <div className="notification is-primary is-light mt-5">
-                Bạn đã mua gói 365 ngày vào lúc <strong> 12h</strong> ngày
-                <strong> 17/9/2023</strong>, gói sẽ hết hạn vào lúc
-                <strong> 12h</strong> ngày <strong> 17/9/2024 </strong>
-              </div>
-              <h4 className="subtitle is-4">Lịch sử mua hàng</h4>
-              <div className="table-container">
-                <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                  <thead>
-                    <tr>
-                      <th>Ngày mua hàng</th>
-                      <th>Thời gian mua</th>
-                      <th>Tên gói</th>
-                      <th>Mệnh giá</th>
-                      <th>Ngày hết hạn</th>
-                    </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <td>17/9/2023</td>
-                      <td>12:59:100</td>
-                      <td>Tên gói 1</td>
-                      <td>90000 VNĐ</td>
-                      <td>17/9/2024</td>
-                    </tr>
-                    <tr>
-                      <td>17/9/2023</td>
-                      <td>12:59:100</td>
-                      <td>Tên gói 1</td>
-                      <td>90000 VNĐ</td>
-                      <td>17/9/2024</td>
-                    </tr>
-                    <tr>
-                      <td>17/9/2023</td>
-                      <td>12:59:100</td>
-                      <td>Tên gói 1</td>
-                      <td>90000 VNĐ</td>
-                      <td>17/9/2024</td>
-                    </tr>
-                    <tr>
-                      <td>17/9/2023</td>
-                      <td>12:59:100</td>
-                      <td>Tên gói 1</td>
-                      <td>90000 VNĐ</td>
-                      <td>17/9/2024</td>
-                    </tr>
-                    <tr>
-                      <td>17/9/2023</td>
-                      <td>12:59:100</td>
-                      <td>Tên gói 1</td>
-                      <td>90000 VNĐ</td>
-                      <td>17/9/2024</td>
-                    </tr>
-                    <tr>
-                      <td>17/9/2023</td>
-                      <td>12:59:100</td>
-                      <td>Tên gói 1</td>
-                      <td>90000 VNĐ</td>
-                      <td>17/9/2024</td>
-                    </tr>
-                    <tr>
-                      <td>17/9/2023</td>
-                      <td>12:59:100</td>
-                      <td>Tên gói 1</td>
-                      <td>90000 VNĐ</td>
-                      <td>17/9/2024</td>
-                    </tr>
-                    <tr>
-                      <td>17/9/2023</td>
-                      <td>12:59:100</td>
-                      <td>Tên gói 1</td>
-                      <td>90000 VNĐ</td>
-                      <td>17/9/2024</td>
-                    </tr>
-                    <tr>
-                      <td>17/9/2023</td>
-                      <td>12:59:100</td>
-                      <td>Tên gói 1</td>
-                      <td>90000 VNĐ</td>
-                      <td>17/9/2024</td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
+            </>
           ) : active === "help" ? (
-            <div style={{ paddingLeft: 15, marginBottom: 15 }}>
+            <div style={{ paddingLeft: 100, marginBottom: 15 }}>
               <h2 className="title is-2 mb-5">
                 Chính sách về BLW (baby led weaning)
               </h2>
-              <p class="subtitle is-6">
+              <p class="subtitle is-6 mt-5">
                 Chế độ ăn{" "}
                 <strong className="has-text-primary">
                   BLW (Baby-Led Weaning)
@@ -696,14 +701,14 @@ const Profile = () => {
                     khả năng ngồi đứng độc lập và không có dấu hiệu dự đoán của
                     vấn đề sức khỏe nghiêm trọng.
                   </li>
-                  <li>
+                  <li className=" mt-3">
                     <strong className="has-text-primary title is-6">
                       Loại thức ăn:
                     </strong>
                     Bé có thể thử nhiều loại thức ăn, bao gồm thức ăn gia đình
                     được chuẩn bị dễ ăn và dễ nắm bằng tay.
                   </li>
-                  <li>
+                  <li className=" mt-3">
                     <strong className="has-text-primary title is-6">
                       An toàn:
                     </strong>
@@ -711,14 +716,14 @@ const Profile = () => {
                     loại thức ăn có nguy cơ nóng hoặc nghi ngờ về nguy cơ nghẹt
                     họng.
                   </li>
-                  <li>
+                  <li className=" mt-3">
                     <strong className="has-text-primary title is-6">
                       Giám sát:
                     </strong>
                     Luôn giám sát bé trong thời gian ăn và đảm bảo rằng bé có
                     thể nắm và nuốt thức ăn một cách an toàn.
                   </li>
-                  <li>
+                  <li className=" mt-3">
                     <strong className="has-text-primary title is-6">
                       Khuyến nghị về việc tiếp tục cho con bú:
                     </strong>
@@ -726,14 +731,14 @@ const Profile = () => {
                     thức. Bé vẫn có thể được cho bú hoặc sữa công thức nhưng
                     thức ăn cố định cũng sẽ là một phần của chế độ ăn của bé.
                   </li>
-                  <li>
+                  <li className=" mt-3">
                     <strong className="has-text-primary title is-6">
                       Thời gian:
                     </strong>
                     Cho bé thời gian để khám phá và học cách ăn. Đừng ép bé ăn
                     hoặc gắn liền với việc phải ăn nhiều.
                   </li>
-                  <li>
+                  <li className=" mt-3">
                     <strong className="has-text-primary title is-6">
                       Tư vấn với bác sĩ hoặc chuyên gia dinh dưỡng:
                     </strong>
