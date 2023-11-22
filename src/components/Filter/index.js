@@ -20,13 +20,16 @@ const Filter = ({ handleSearchFilter, name }) => {
   );
   const handleMeal = (e) => {
     const selectedMeal = e.target.value;
+    console.log("chon bua an 1:", typeof selectedMeal);
     setMealId((prevMealId) => {
       const updatedMealId = prevMealId.includes(selectedMeal)
         ? prevMealId.filter((value) => value !== selectedMeal)
         : [...prevMealId, selectedMeal];
       handleSearchFilter(name, ageId, updatedMealId, rating);
+      console.log("chon bua an 2:", prevMealId.includes(selectedMeal));
       return updatedMealId;
     });
+    console.log("chon bua an 3:", mealId);
   };
   const handleAge = (e) => {
     const selectedValue = e.target.value;
