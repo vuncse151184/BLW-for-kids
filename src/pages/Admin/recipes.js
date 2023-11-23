@@ -1264,7 +1264,9 @@ const RecipesManager = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {recipe.recipeImage}
+                  <figure className="image is-64x64">
+                    <img src={recipe.recipeImage} />
+                  </figure>
                 </th>
                 <th>{recipe.ageName}</th>
                 <th>{recipe.totalFavorite}</th>
@@ -1272,12 +1274,20 @@ const RecipesManager = () => {
                 <th>{recipe.aveRate}</th>
                 <th>{recipe.forPremium ? "True" : "False"}</th>
                 <th>
-                  <button onClick={() => handleRemove(recipe.recipeId)}>
-                    <FontAwesomeIcon icon={faTrashCan} />
+                  <button
+                    className="button is-danger"
+                    style={{ width: 24, height: 32 }}
+                    onClick={() => handleRemove(recipe.recipeId)}
+                  >
+                    <i className="fas fa-trash"></i>
                   </button>
-                  &nbsp; &nbsp;
-                  <button onClick={() => handleEditOpen(recipe.recipeId)}>
-                    <FontAwesomeIcon icon={faPaintBrush} />
+                  &nbsp;
+                  <button
+                    className="button is-link"
+                    style={{ width: 24, height: 32 }}
+                    onClick={() => handleEditOpen(recipe.recipeId)}
+                  >
+                    <i className="fas fa-pen-to-square"></i>
                   </button>
                 </th>
               </tr>
