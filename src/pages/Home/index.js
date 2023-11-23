@@ -5,7 +5,10 @@ import Rating from "@mui/material/Rating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import home1 from "../../image/home1.png";
+import home1 from "../../image/background.jpg";
+import home2 from "../../image/layout3.jpg";
+import home4 from "../../image/layout4.jpg";
+import home3 from "../../image/layout5.jpg";
 import { useQuery } from "react-query";
 import loadingGif from "../../image/Baby-Crawl-Cycle-unscreen.gif";
 import Swal from "sweetalert2";
@@ -127,7 +130,7 @@ const Home = ({ results, addFavorite, removeFavorite }) => {
                   </h4>
                 </>
               ) : (
-                <div style={{ width: "1024px", height: "920px" }}>
+                <div style={{ width: "1024px", minHeight: "920px" }}>
                   <div className="grid-container">
                     {results?.data?.map((result) => (
                       <div className="grid-item" key={result.recipeId}>
@@ -267,11 +270,15 @@ const Home = ({ results, addFavorite, removeFavorite }) => {
               }}
             >
               <article id="intro-card-welcome">
-                <img src={home1} alt="Avatar wallpaper" />
-                <div className="content-welcome">
+                <img
+                  src={home2}
+                  alt="Avatar wallpaper"
+                  style={{ height: "400px" }}
+                />
+                {/* <div className="content-welcome">
                   <h1>Chào mừng các bạn đã đến với Baby Led Weaning</h1>
                   <div className="infos"></div>
-                </div>
+                </div> */}
               </article>
             </div>
 
@@ -305,7 +312,7 @@ const Home = ({ results, addFavorite, removeFavorite }) => {
                 <Link to="/plan">
                   <figure className="home-explore">
                     <img
-                      src={home1}
+                      src={home3}
                       alt="Mountains"
                       style={{
                         width: "250px",
@@ -321,7 +328,7 @@ const Home = ({ results, addFavorite, removeFavorite }) => {
                 <Link to="/list-expert">
                   <figure className="home-explore">
                     <img
-                      src={home1}
+                      src={home4}
                       alt="Mountains"
                       style={{
                         width: "250px",

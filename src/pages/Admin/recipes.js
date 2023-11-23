@@ -346,6 +346,43 @@ const RecipesManager = () => {
       console.error("Error calling API:", error);
     }
   };
+  const handleRemove = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await fetch(
+          `https://blw-api.azurewebsites.net/api/Recipe/DeleteRecipe?id=${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${admin.token}`,
+            },
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            queryClient.invalidateQueries("allRecipes");
+          })
+          .catch((error) => {
+            console.error("Error during fetch:", error);
+          });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
   return (
     <>
       <div style={{ backgroundColor: "#f3f6f4", height: "50px" }}>
@@ -1227,7 +1264,9 @@ const RecipesManager = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {recipe.recipeImage}
+                  <figure className="image is-64x64">
+                    <img src={recipe.recipeImage} />
+                  </figure>
                 </th>
                 <th>{recipe.ageName}</th>
                 <th>{recipe.totalFavorite}</th>
@@ -1235,12 +1274,20 @@ const RecipesManager = () => {
                 <th>{recipe.aveRate}</th>
                 <th>{recipe.forPremium ? "True" : "False"}</th>
                 <th>
-                  <button>
-                    <FontAwesomeIcon icon={faTrashCan} />
+                  <button
+                    className="button is-danger"
+                    style={{ width: 24, height: 32 }}
+                    onClick={() => handleRemove(recipe.recipeId)}
+                  >
+                    <i className="fas fa-trash"></i>
                   </button>
-                  &nbsp; &nbsp;
-                  <button onClick={() => handleEditOpen(recipe.recipeId)}>
-                    <FontAwesomeIcon icon={faPaintBrush} />
+                  &nbsp;
+                  <button
+                    className="button is-link"
+                    style={{ width: 24, height: 32 }}
+                    onClick={() => handleEditOpen(recipe.recipeId)}
+                  >
+                    <i className="fas fa-pen-to-square"></i>
                   </button>
                 </th>
               </tr>
