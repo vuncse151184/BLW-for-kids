@@ -69,6 +69,7 @@ const Profile = () => {
       .then((data) => {
         setDataAccount(data);
         setFullname(data?.data?.fullname || null);
+        setChangeAvatar(data?.data?.avatar || null);
         setChangeEmail(data?.data?.email || null);
         setChangeDateOfBirth(data?.data?.dateOfBirth || null);
         setChangePhone(data?.data?.phoneNum || null);
