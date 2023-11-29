@@ -358,7 +358,7 @@ const RecipeDetail = () => {
                 <article className="media">
                   <div className="media-left">
                     <figure className="image is-64x64">
-                      <img src={detailRecipe?.data?.cusRating.avatar} alt="" />
+                      <img src={detailRecipe?.data?.cusRating?.avatar} alt="" />
                     </figure>
                   </div>
                   <div className="media-content">
@@ -430,7 +430,7 @@ const RecipeDetail = () => {
                   <article className="media">
                     <div className="media-left">
                       <figure className="image is-64x64">
-                        <img src={rate.avatar} alt="" />
+                        <img src={rate?.avatar} alt="" />
                       </figure>
                     </div>
                     <div className="media-content">
