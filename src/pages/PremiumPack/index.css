@@ -56,11 +56,11 @@
 
 .swal2-container {
     z-index: 10000;
-    /* You can adjust this value as needed */
+    /* You can adjust this value as needed /
 }
 
-/* Ensure that the StyledModal has a lower z-index */
+/ Ensure that the StyledModal has a lower z-index /
 .StyledModal {
     z-index: 9999;
-    /* A value lower than the Swal modal */
+    / A value lower than the Swal modal */
 }
