@@ -69,6 +69,7 @@ const Profile = () => {
       .then((data) => {
         setDataAccount(data);
         setFullname(data?.data?.fullname || null);
+        setChangeAvatar(data?.data?.avatar || null);
         setChangeEmail(data?.data?.email || null);
         setChangeDateOfBirth(data?.data?.dateOfBirth || null);
         setChangePhone(data?.data?.phoneNum || null);
@@ -506,39 +507,53 @@ const Profile = () => {
                         className="card"
                         style={{ width: "300px", height: "350px" }}
                       >
-                        <div className="card-image">
-                          <figure className="image is-3by2">
-                            <img
-                              src={favorite?.recipe?.recipeImage}
-                              alt="Placeholder"
-                            />
-                          </figure>
-                        </div>
+                        <Link
+                          to={`/recipe-detail/${favorite?.recipe?.recipeId}`}
+                        >
+                          <div className="card-image">
+                            <figure className="image is-3by2">
+                              <img
+                                src={favorite?.recipe?.recipeImage}
+                                alt="Placeholder"
+                              />
+                            </figure>
+                          </div>
+                        </Link>
+
                         <div className="card-content">
                           <div className="media">
                             <div className="media-content">
-                              <p
-                                className="title is-5"
-                                style={{
-                                  marginBottom: 10,
-                                  width: "200px",
-                                  height: "48px",
-                                  overflow: "hidden",
-                                }}
+                              <Link
+                                to={`/recipe-detail/${favorite?.recipe?.recipeId}`}
                               >
-                                {favorite?.recipe?.recipeName}
-                              </p>
-                              <div style={{ marginTop: 5 }}>
-                                <p className="title is-6">
-                                  <strong className="subtitle is-6 has-text-primary">
-                                    Ngày cập nhật:
-                                  </strong>
-                                  &nbsp;
-                                  {new Date(
-                                    favorite?.recipe?.updateTime
-                                  ).toLocaleDateString()}
+                                <p
+                                  className="title is-5"
+                                  style={{
+                                    marginBottom: 10,
+                                    width: "200px",
+                                    height: "48px",
+                                    overflow: "hidden",
+                                  }}
+                                >
+                                  {favorite?.recipe?.recipeName}
                                 </p>
-                              </div>
+                              </Link>
+                              <Link
+                                to={`/recipe-detail/${favorite?.recipe?.recipeId}`}
+                              >
+                                <div style={{ marginTop: 5 }}>
+                                  <p className="title is-6">
+                                    <strong className="subtitle is-6 has-text-primary">
+                                      Ngày cập nhật:
+                                    </strong>
+                                    &nbsp;
+                                    {new Date(
+                                      favorite?.recipe?.updateTime
+                                    ).toLocaleDateString()}
+                                  </p>
+                                </div>
+                              </Link>
+
                               <div style={{ textAlign: "center" }}>
                                 <button
                                   className="button is-warning is-light mt-2"
