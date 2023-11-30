@@ -117,13 +117,13 @@ const PremiumPack = () => {
                     </div>
                     <div style={{ display: "flex", justifyContent: "center", paddingBottom: "20px" }}>
 
-                        <div className="pack-table">
+                        <div className="pack-table" style={{ width: "700px" }}>
                             <table className="table is-striped ">
                                 <thead>
                                     <tr>
-                                        <th>Quyền lợi thành viên</th>
-                                        <th>Miễn phí</th>
-                                        <th>Hội viên</th>
+                                        <th style={{ textAlign: "center" }}>Quyền lợi thành viên</th>
+                                        <th style={{ textAlign: "center" }}>Miễn phí</th>
+                                        <th style={{ textAlign: "center" }}>Hội viên</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -150,7 +150,7 @@ const PremiumPack = () => {
                             </table>
                         </div>
                     </div>
-                    <div style={{ display: "flex", justifyContent: "center", padding: "50px 25px 0 25px" }}>
+                    <div style={{ display: "flex", justifyContent: "center"}}>
 
                         {user?.data.isPremium ? (
                             <div className="package-1" onClick={(newValue) => {
@@ -176,7 +176,7 @@ const PremiumPack = () => {
                             </div>
                         )}
 
-                        <div className="package-2" onClick={(newValue) => {
+                        <div className="package-2"  onClick={(newValue) => {
                             newValue = '0badbceb37a54cba83e7'
                             handleOpen(newValue)
                             setSelectedPack('0badbceb37a54cba83e7')
@@ -224,7 +224,7 @@ const PremiumPack = () => {
                                                     <img
                                                         src={`data:image/jpeg;base64,${data.imageQR.fileContents}`}
                                                     />
-                                                    <div className="step-description" style={{ alignItems: "center" ,paddingTop:"30px"}}><p>Mã của bạn là<b> {data?.privateCode}</b> </p></div>
+                                                    <div className="step-description" style={{ alignItems: "center", paddingTop: "30px" }}><p>Mã của bạn là<b> {data?.privateCode}</b> </p></div>
                                                 </>
 
 
